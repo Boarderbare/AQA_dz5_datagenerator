@@ -1,0 +1,1 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/uoa0eoimb5q6knn7?svg=true)](https://ci.appveyor.com/project/Boarderbare/aqa-dz5-datagenerator)
