@@ -1,6 +1,9 @@
 package ru.netology.delivery.test;
 
 import com.codeborne.selenide.SelenideElement;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +12,7 @@ import ru.netology.delivery.data.DataGenerator;
 import ru.netology.delivery.data.UserInfo;
 
 import java.time.Duration;
+import java.util.Objects;
 
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
@@ -26,7 +30,10 @@ class DeliveryTest {
     void shouldGenerateTestDataUsingUtils() {
         UserInfo info = DataGenerator.Registration.generateUser("ru");
         String date = DataGenerator.generateDate(7);
-        System.out.println(info.getCity() + "\n" + info.getName() + "\n" + info.getPhone() + "\n" + date);
+        assertNotNull(info.getCity());
+        assertNotNull(info.getName());
+        assertNotNull(info.getPhone());
+        assertNotNull(DataGenerator.generateDate(0));
     }
 
     @Test
@@ -48,6 +55,9 @@ class DeliveryTest {
         form.$("[data-test-id=agreement] .checkbox__box").click();
         form.$$(".button").find(exactText("Запланировать")).click();
         $(withText("Успешно")).shouldBe(visible, Duration.ofSeconds(15));
+        $(withText("Встреча успешно запланирована на")).shouldBe(visible, Duration.ofSeconds(15));
+        $(withText(firstMeetingDate)).shouldBe(visible, Duration.ofSeconds(15));
+
         $("[data-test-id=success-notification] .icon-button__text").click();
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.CONTROL + "A");
         form.$("[data-test-id=date] .input__control").sendKeys(Keys.DELETE);
@@ -56,5 +66,7 @@ class DeliveryTest {
         $(withText("Необходимо подтверждение")).shouldBe(visible, Duration.ofSeconds(15));
         $("[data-test-id=replan-notification] .button__content").click();
         $(withText("Успешно")).shouldBe(visible, Duration.ofSeconds(15));
+        $(withText("Встреча успешно запланирована на")).shouldBe(visible, Duration.ofSeconds(15));
+        $(withText(secondMeetingDate)).shouldBe(visible, Duration.ofSeconds(15));
     }
 }
